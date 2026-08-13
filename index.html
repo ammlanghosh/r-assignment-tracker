@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assessment Tracker</title>
+
+    <title>Student Assessment Tracker</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <div class="container">
-        <h1>Assessment Tracker</h1>
 
-        <div class="dashboard">
+        <h1>Student Assessment Tracker</h1>
+
+        <div class="stats">
             <div class="card">
-                <h3>Total Students</h3>
-                <p id="totalStudents">0</p>
+                <h2 id="totalStudents">0</h2>
+                <p>Total Students</p>
+            </div>
+
+            <div class="card">
+                <h2 id="completedStudents">0</h2>
+                <p>Completed</p>
+            </div>
+
+            <div class="card">
+                <h2 id="pendingStudents">0</h2>
+                <p>Pending</p>
             </div>
         </div>
 
-        <h2>Student Details</h2>
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by Register Number or Student Name"
+            >
+        </div>
 
         <table>
             <thead>
@@ -32,14 +51,17 @@
 
             <tbody id="studentTableBody">
                 <tr>
-                    <td colspan="3">Loading...</td>
+                    <td colspan="3">Loading students...</td>
                 </tr>
             </tbody>
         </table>
 
-        <p id="errorMessage"></p>
     </div>
 
+    <!-- Supabase JavaScript Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Your JavaScript -->
     <script src="app.js"></script>
 
 </body>
