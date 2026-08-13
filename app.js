@@ -14,6 +14,11 @@ const students = [
         name: "Student 3",
         github: "https://github.com/"
     }
+      {
+        registerNo: "23XXX004",
+        name: "Student 4",
+        github: "https://github.com/"
+    }
 ];
 
 
