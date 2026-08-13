@@ -1,93 +1,139 @@
-const students = [
-    {
-        registerNo: "23XXX001",
-        name: "Student 1",
-        github: "https://github.com/"
-    },
-    {
-        registerNo: "23XXX002",
-        name: "Student 2",
-        github: "https://github.com/"
-    },
-    {
-        registerNo: "23XXX003",
-        name: "Student 3",
-        github: "https://github.com/"
-    }
-      {
-        registerNo: "23XXX004",
-        name: "Student 4",
-        github: "https://github.com/"
-    }
-];
+// ========================================
+// SUPABASE CONFIGURATION
+// ========================================
+
+const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+// Example:
+// const SUPABASE_URL = "https://xxxxxxxxxxxx.supabase.co";
+// const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIs...";
 
 
-function displayStudents(data) {
+// ========================================
+// LOAD STUDENTS
+// ========================================
 
-    const table = document.getElementById("studentTable");
+async function loadStudents() {
 
-    table.innerHTML = "";
+    const totalStudentsElement =
+        document.getElementById("totalStudents");
 
-    data.forEach(student => {
+    const tableBody =
+        document.getElementById("studentTableBody");
 
-        const row = document.createElement("tr");
+    const errorMessage =
+        document.getElementById("errorMessage");
 
-        row.innerHTML = `
-            <td>${student.registerNo}</td>
+    try {
 
-            <td>${student.name}</td>
+        // Clear previous error
+        errorMessage.textContent = "";
 
-            <td>
-                <a href="${student.github}"
-                   target="_blank">
-                    <button class="github-button">
-                        Open GitHub
-                    </button>
-                </a>
-            </td>
+        // Fetch data from Supabase
+        const response = await fetch(
+            `${SUPABASE_URL}/rest/v1/students?select=RegNo,StdName,GitHubLink`,
+            {
+                method: "GET",
 
-            <td>
-                <span>Pending</span>
-            </td>
+                headers: {
+                    "apikey": SUPABASE_ANON_KEY,
+                    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        // Check for Supabase error
+        if (!response.ok) {
+
+            const errorText = await response.text();
+
+            throw new Error(
+                `Supabase error: ${response.status} - ${errorText}`
+            );
+        }
+
+        const students = await response.json();
+
+        console.log("Students received:", students);
+
+        // ========================================
+        // TOTAL STUDENTS
+        // ========================================
+
+        totalStudentsElement.textContent = students.length;
+
+
+        // ========================================
+        // DISPLAY STUDENTS
+        // ========================================
+
+        tableBody.innerHTML = "";
+
+        if (students.length === 0) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="3">
+                        No students found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        students.forEach(student => {
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${student.RegNo ?? ""}</td>
+
+                <td>${student.StdName ?? ""}</td>
+
+                <td>
+                    ${
+                        student.GitHubLink
+                        ? `<a href="${student.GitHubLink}"
+                              target="_blank">
+                              GitHub
+                           </a>`
+                        : "Not Available"
+                    }
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+    } catch (error) {
+
+        console.error("Error loading students:", error);
+
+        totalStudentsElement.textContent = "0";
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="3">
+                    Unable to load student data.
+                </td>
+            </tr>
         `;
 
-        table.appendChild(row);
-
-    });
-
-    document.getElementById("totalStudents").textContent =
-        data.length;
-
-    document.getElementById("submittedStudents").textContent =
-        data.length;
+        errorMessage.textContent =
+            "Error: " + error.message;
+    }
 }
 
 
-displayStudents(students);
+// ========================================
+// START APPLICATION
+// ========================================
 
-
-document
-    .getElementById("searchBox")
-    .addEventListener("input", function () {
-
-        const searchText =
-            this.value.toLowerCase();
-
-        const filteredStudents =
-            students.filter(student =>
-
-                student.registerNo
-                    .toLowerCase()
-                    .includes(searchText)
-
-                ||
-
-                student.name
-                    .toLowerCase()
-                    .includes(searchText)
-
-            );
-
-        displayStudents(filteredStudents);
-
-    });
+document.addEventListener(
+    "DOMContentLoaded",
+    loadStudents
+);
