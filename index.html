@@ -1,54 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-    <title>R Programming Assignment Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Tracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <header>
-        <h1>R Programming Assignment Tracker (An Application using Vercel and Supabase</h1>
-        <p>Student GitHub Submission Dashboard</p>
-    </header>
-    <main>
-        <section class="summary">
+
+    <div class="container">
+        <h1>Assessment Tracker</h1>
+
+        <div class="dashboard">
             <div class="card">
                 <h3>Total Students</h3>
                 <p id="totalStudents">0</p>
             </div>
-            <div class="card">
-                <h3>Submitted</h3>
-                <p id="submittedStudents">0</p>
-            </div>
-        </section>
-        <section>
-            <input
-                type="text"
-                id="searchBox"
-                placeholder="Search by Register Number or Student Name"
-            >
-        </section>
-        <section>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Register No.</th>
-                        <th>Student Name</th>
-                        <th>GitHub</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="studentTable">
-                </tbody>
-            </table>
-        </section>
-    </main>
-    <footer>
-        <p>
-            R Programming Assignment Tracker
-        </p>
-    </footer>
+        </div>
+
+        <h2>Student Details</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>RegNo</th>
+                    <th>Student Name</th>
+                    <th>GitHub Link</th>
+                </tr>
+            </thead>
+
+            <tbody id="studentTableBody">
+                <tr>
+                    <td colspan="3">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p id="errorMessage"></p>
+    </div>
+
     <script src="app.js"></script>
+
 </body>
 </html>
